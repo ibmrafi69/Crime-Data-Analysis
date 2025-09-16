@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Crime Data Analysis</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen">
+  <div id="navbar-container"></div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+    document.body.style.marginTop = '0px';
+  </script>
+  <div class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-lg p-8 mx-4">
+      <h2 class="text-2xl font-bold text-blue-400 mb-4 text-center">Sign In</h2>
+      <form method="post" action="login.php">
+          <div>
+            <label for="email" class="block text-sm font-semibold text-gray-300 mb-2">Email</label>
+      <input type="email" id="email" name="email" required class="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter your email" name="email">
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-semibold text-gray-300 mb-2">Password</label>
+            <div class="relative">
+              <input type="password" id="password" name="password" required class="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 pr-12" placeholder="Enter your password" name="password">
+              <button type="button" id="togglePwd" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-400 focus:outline-none">
+                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.956 9.956 0 012.293-3.95M6.634 6.634A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.96 9.96 0 01-4.205 5.442M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/></svg>
+              </button>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-2">
+          <label class="flex items-center text-gray-300 text-sm">
+            <input type="checkbox" id="rememberMe" name="rememberMe" class="form-checkbox h-4 w-4 text-blue-600 mr-2">
+            Remember Me
+          </label>
+          <div class="flex gap-4">
+            <a href="#" class="text-blue-400 hover:underline text-sm">Forgot Password?</a>
+            <a href="sign up.html" class="text-gray-300 hover:text-blue-400 text-sm">Sign Up</a>
+          </div>
+        </div>
+    <button type="submit" class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition">Sign In</button>
+        <div id="errorMsg" class="text-red-400 text-center mt-2 hidden"></div>
+        <div class="mt-6 text-center text-gray-400">or sign in with</div>
+        <div class="flex gap-4 justify-center mt-3">
+          <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.6 0 0 .6 0 1.326v21.348C0 23.4.6 24 1.326 24h11.495v-9.294H9.691v-3.622h3.13V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.674V1.326C24 .6 23.4 0 22.675 0"></path></svg>
+            Facebook
+          </a>
+          <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white hover:bg-gray-200 text-gray-800 font-semibold shadow transition">
+            <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.73 1.22 9.24 3.22l6.92-6.92C36.16 2.34 30.39 0 24 0 14.61 0 6.27 5.48 1.64 13.44l8.06 6.27C12.36 13.13 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.09 24.5c0-1.64-.15-3.22-.43-4.75H24v9.02h12.44c-.54 2.92-2.18 5.39-4.65 7.05l7.23 5.62C43.73 37.13 46.09 31.27 46.09 24.5z"/><path fill="#FBBC05" d="M9.7 28.09c-.54-1.64-.85-3.38-.85-5.09s.31-3.45.85-5.09l-8.06-6.27C.6 14.61 0 19.13 0 24s.6 9.39 1.64 13.36l8.06-6.27z"/><path fill="#EA4335" d="M24 48c6.39 0 12.16-2.11 16.68-5.73l-7.23-5.62c-2.01 1.35-4.59 2.15-7.45 2.15-6.26 0-11.64-3.63-14.3-8.91l-8.06 6.27C6.27 42.52 14.61 48 24 48z"/></svg>
+            Google
+          </a>
+          <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-400 hover:bg-blue-500 text-white font-semibold shadow transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557a9.93 9.93 0 01-2.828.775 4.932 4.932 0 002.165-2.724c-.951.564-2.005.974-3.127 1.195a4.916 4.916 0 00-8.38 4.482C7.691 8.095 4.066 6.13 1.64 3.161c-.542.929-.855 2.006-.855 3.163 0 2.18 1.11 4.104 2.797 5.23a4.904 4.904 0 01-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 01-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 010 21.543a13.94 13.94 0 007.548 2.212c9.058 0 14.009-7.513 14.009-14.009 0-.213-.005-.425-.014-.636A10.025 10.025 0 0024 4.557z"></path></svg>
+            Twitter
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Password show/hide toggle
+    document.getElementById('togglePwd').addEventListener('click', function() {
+      var pwd = document.getElementById('password');
+      var eyeOpen = document.getElementById('eyeOpen');
+      var eyeClosed = document.getElementById('eyeClosed');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+      } else {
+        pwd.type = 'password';
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+      }
+    });
+
+    // Only keep password toggle JS
+    document.getElementById('togglePwd').addEventListener('click', function() {
+      var pwd = document.getElementById('password');
+      var eyeOpen = document.getElementById('eyeOpen');
+      var eyeClosed = document.getElementById('eyeClosed');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+      } else {
+        pwd.type = 'password';
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

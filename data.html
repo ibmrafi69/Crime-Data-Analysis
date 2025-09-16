@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crime Data Visualization</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+  <div id="navbar-container"></div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+  </script>
+
+  <!-- Page Title -->
+  <header class="max-w-4xl mx-auto mt-10 mb-6 text-center">
+    <h1 class="text-4xl font-bold text-blue-400 mb-2">Crime Data Visualization</h1>
+    <p class="text-gray-400">Explore crime statistics with interactive charts, tables, and maps.</p>
+  </header>
+
+  <!-- Section with 4 Buttons -->
+  <section class="max-w-4xl mx-auto mb-8 flex justify-center gap-4">
+    <button id="btnGraph" class="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 font-semibold focus:outline-none">Graph</button>
+    <button id="btnTable" class="px-6 py-2 rounded-lg bg-gray-700 hover:bg-blue-700 font-semibold focus:outline-none">Table</button>
+    <button id="btnOverview" class="px-6 py-2 rounded-lg bg-gray-700 hover:bg-blue-700 font-semibold focus:outline-none">Overview</button>
+    <button id="btnMap" class="px-6 py-2 rounded-lg bg-gray-700 hover:bg-blue-700 font-semibold focus:outline-none">Map</button>
+  </section>
+
+  <!-- Dynamic Content Section -->
+  <section id="contentSection" class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
+    <!-- Default: Graph -->
+    <canvas id="crimeChart" class="w-full h-64"></canvas>
+  </section>
+
+  <script>
+    // Track active button
+    let activeBtn = 'Graph';
+    function setActive(btn) {
+      activeBtn = btn;
+      document.getElementById('btnGraph').classList.remove('bg-blue-600');
+      document.getElementById('btnGraph').classList.add('bg-gray-700');
+      document.getElementById('btnTable').classList.remove('bg-blue-600');
+      document.getElementById('btnTable').classList.add('bg-gray-700');
+      document.getElementById('btnOverview').classList.remove('bg-blue-600');
+      document.getElementById('btnOverview').classList.add('bg-gray-700');
+      document.getElementById('btnMap').classList.remove('bg-blue-600');
+      document.getElementById('btnMap').classList.add('bg-gray-700');
+      document.getElementById('btn' + btn).classList.remove('bg-gray-700');
+      document.getElementById('btn' + btn).classList.add('bg-blue-600');
+    }
+    // Sample crime data
+    const crimeData = {
+  labels: [
+    "Dhaka - Robbery",
+    "Chattogram - Assault",
+    "Sylhet - Burglary",
+    "Rangpur - Fraud",
+    "Khulna - Homicide",
+    "Barisal - Theft",
+    "Mymensingh - Kidnapping"
+  ],
+  values: [50, 30, 20, 10, 5, 8, 12]
+    };
+
+    // Chart.js setup
+    let chartInstance;
+    function showGraph() {
+      document.getElementById('contentSection').innerHTML = '<canvas id="crimeChart" class="w-full h-64"></canvas>';
+      const ctx = document.getElementById('crimeChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: crimeData.labels,
+          datasets: [{
+            label: 'Crime Incidents',
+            data: crimeData.values,
+            backgroundColor: [
+              '#3b82f6', '#6366f1', '#10b981', '#f59e42', '#ef4444'
+            ],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Crime Incidents by Type',
+              color: '#fff',
+              font: { size: 18 }
+            }
+          },
+          scales: {
+            x: { ticks: { color: '#fff' }, grid: { color: '#374151' } },
+            y: { ticks: { color: '#fff' }, grid: { color: '#374151' } }
+          }
+        }
+      });
+    }
+
+    function showTable() {
+      let tableHTML = `<table class='min-w-full bg-gray-900 rounded-lg overflow-hidden'>
+        <thead class='bg-gray-700 text-blue-400'>
+          <tr>
+            <th class='py-2 px-4'>Crime Type</th>
+            <th class='py-2 px-4'>Incidents</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      for (let i = 0; i < crimeData.labels.length; i++) {
+        tableHTML += `<tr class='border-b border-gray-700'>
+          <td class='py-2 px-4'>${crimeData.labels[i]}</td>
+          <td class='py-2 px-4'>${crimeData.values[i]}</td>
+        </tr>`;
+      }
+      tableHTML += `</tbody></table>`;
+      document.getElementById('contentSection').innerHTML = tableHTML;
+    }
+
+    function showOverview() {
+      const total = crimeData.values.reduce((a, b) => a + b, 0);
+      const maxType = crimeData.labels[crimeData.values.indexOf(Math.max(...crimeData.values))];
+      const minType = crimeData.labels[crimeData.values.indexOf(Math.min(...crimeData.values))];
+      const overviewHTML = `<div class='text-lg text-gray-200'>
+        <h2 class='text-2xl font-bold text-blue-400 mb-4'>Overview</h2>
+        <p>Total crime incidents: <span class='font-semibold text-blue-400'>${total}</span></p>
+        <p>Most common crime: <span class='font-semibold text-blue-400'>${maxType}</span></p>
+        <p>Least common crime: <span class='font-semibold text-blue-400'>${minType}</span></p>
+        <p class='mt-4'>This data is a sample for demonstration. Real data can be integrated later.</p>
+      </div>`;
+      document.getElementById('contentSection').innerHTML = overviewHTML;
+    }
+
+    function showMap() {
+      const mapHTML = `<div class='flex flex-col items-center justify-center'>
+        <h2 class='text-2xl font-bold text-blue-400 mb-4'>Bangladesh Crime Map</h2>
+        <div id='bdMap' class='w-full h-96 rounded-lg overflow-hidden'></div>
+      </div>`;
+      document.getElementById('contentSection').innerHTML = mapHTML;
+      setTimeout(() => {
+        var map = L.map('bdMap').setView([23.6850, 90.3563], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+  // Sample crime markers for 7 divisions
+  L.marker([23.8103, 90.4125]).addTo(map).bindPopup('Dhaka: Robbery - 50');
+  L.marker([22.3569, 91.7832]).addTo(map).bindPopup('Chattogram: Assault - 30');
+  L.marker([24.9045, 91.8611]).addTo(map).bindPopup('Sylhet: Burglary - 20');
+  L.marker([25.7439, 89.2752]).addTo(map).bindPopup('Rangpur: Fraud - 10');
+  L.marker([22.8456, 89.5403]).addTo(map).bindPopup('Khulna: Homicide - 5');
+  L.marker([22.7010, 90.3535]).addTo(map).bindPopup('Barisal: Theft - 8');
+  L.marker([24.7471, 90.4203]).addTo(map).bindPopup('Mymensingh: Kidnapping - 12');
+      }, 100);
+    }
+
+    // Button event listeners
+    document.getElementById('btnGraph').onclick = showGraph;
+  document.getElementById('btnGraph').onclick = function() { setActive('Graph'); showGraph(); };
+  document.getElementById('btnTable').onclick = function() { setActive('Table'); showTable(); };
+  document.getElementById('btnOverview').onclick = function() { setActive('Overview'); showOverview(); };
+  document.getElementById('btnMap').onclick = function() { setActive('Map'); showMap(); };
+
+    // Show default view
+  setActive('Graph');
+  showGraph();
+  </script>
+
+  <!-- Footer -->
+</body>
+</html>

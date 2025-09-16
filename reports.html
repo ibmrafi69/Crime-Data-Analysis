@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crime Reports | Crime Data Analysis</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+  <div id="navbar-container"></div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+  </script>
+
+  <!-- Reports Section -->
+  <header class="max-w-4xl mx-auto mt-10 mb-6 text-center">
+    <h1 class="text-4xl font-bold text-blue-400 mb-2">Crime Reports</h1>
+    <p class="text-gray-400">Explore different types of crime reports and analytics for Bangladesh.</p>
+  </header>
+
+  <section class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+    <!-- Crime Summary Report (converted to Live News) -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-blue-400 text-3xl mb-4"><i class='bx bx-news'></i></span>
+      <h2 class="text-xl font-bold mb-2">Live Crime News</h2>
+      <p class="text-gray-300 text-center mb-2">Get the latest crime news and updates from across Bangladesh.</p>
+      <a href="live-news.html" class="text-blue-400 hover:underline">View News</a>
+    </div>
+    <!-- Victim & Offender Entry -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-pink-400 text-3xl mb-4"><i class='bx bx-user-plus'></i></span>
+      <h2 class="text-xl font-bold mb-2">Victim & Offender Entry</h2>
+      <p class="text-gray-300 text-center mb-2">Add new victim or offender profile data for analytics.</p>
+      <a href="victim_offender_entry.html" class="text-pink-400 hover:underline">Add Profile</a>
+    </div>
+    <!-- Trend Analysis Report -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-purple-400 text-3xl mb-4"><i class='bx bx-line-chart'></i></span>
+      <h2 class="text-xl font-bold mb-2">Trend Analysis Report</h2>
+      <p class="text-gray-300 text-center mb-2">Time-series, seasonal pattern, future forecast with AI.</p>
+      <a href="trend-analysis-report.html" class="text-purple-400 hover:underline">View Report</a>
+    </div>
+    <!-- Victim & Offender Profile Report -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-pink-400 text-3xl mb-4"><i class='bx bx-user'></i></span>
+      <h2 class="text-xl font-bold mb-2">Victim & Offender Profile Report</h2>
+      <p class="text-gray-300 text-center mb-2">Age, gender, occupation distribution analytics.</p>
+      <a href="victim_offender_profile.html" class="text-pink-400 hover:underline">View Report</a>
+    </div>
+    <!-- Police Response Report -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-yellow-400 text-3xl mb-4"><i class='bx bx-shield'></i></span>
+      <h2 class="text-xl font-bold mb-2">Police Response Report</h2>
+      <p class="text-gray-300 text-center mb-2">Solved, pending, case duration statistics.</p>
+      <a href="police-response-report.html" class="text-yellow-400 hover:underline">View Report</a>
+    </div>
+    <!-- Custom Report Generator -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-indigo-400 text-3xl mb-4"><i class='bx bx-filter'></i></span>
+      <h2 class="text-xl font-bold mb-2">Custom Report Generator</h2>
+      <p class="text-gray-300 text-center mb-2">Compare crime data between two divisions or areas.</p>
+      <a href="custom-report-generator.html" class="text-indigo-400 hover:underline">Compare Divisions</a>
+    </div>
+    <!-- Police Case Duration Entry -->
+    <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center">
+      <span class="text-yellow-400 text-3xl mb-4"><i class='bx bx-time'></i></span>
+      <h2 class="text-xl font-bold mb-2">Police Case Duration Entry</h2>
+      <p class="text-gray-300 text-center mb-2">Add and analyze solved, pending, and case duration statistics.</p>
+      <a href="police-response-entry.html" class="text-yellow-400 hover:underline">Add Case Duration</a>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer id="contact" class="w-full bg-gray-800 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex flex-col items-start">
+        <span class="font-bold text-lg text-blue-400 mb-2">Contact Info</span>
+        <span class="text-gray-400">Email: ibrahimrafi963@gmail.com</span>
+        <span class="text-gray-400">Phone: +8801560064063</span>
+        <div class="flex gap-4 mt-3">
+          <a href="mailto:ibrahimrafi963@gmail.com" class="text-blue-400 hover:text-blue-600"><i class='bx bxl-gmail text-2xl'></i></a>
+          <a href="https://twitter.com/IBMRAFI4" target="_blank" class="text-blue-400 hover:text-blue-600"><i class='bx bxl-twitter text-2xl'></i> @IBMRAFI4</a>
+          <a href="tel:+8801560064063" class="text-blue-400 hover:text-blue-600"><i class='bx bxs-phone text-2xl'></i></a>
+        </div>
+      </div>
+      <form class="flex flex-col items-start gap-2 w-full md:w-auto" onsubmit="event.preventDefault();">
+        <label for="subscribe" class="text-gray-400">Subscribe for updates</label>
+        <div class="flex gap-2">
+          <input type="email" id="subscribe" name="subscribe" placeholder="Your email" class="px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold">Subscribe</button>
+        </div>
+      </form>
+    </div>
+    <div class="text-center text-gray-500 text-sm mt-6">&copy; 2025 CrimeDataAI. All rights reserved.</div>
+  </footer>
+</body>
+</html>

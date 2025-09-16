@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Insights & Crime Forecasting</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+  <div id="navbar-container"></div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+  </script>
+
+  <!-- AI Insights & Crime Forecasting Section -->
+  <section class="max-w-5xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-blue-400 mb-2">AI Insights & Crime Forecasting</h1>
+    <p class="text-gray-300 text-lg mb-8">Use artificial intelligence to predict hotspots, detect patterns, and forecast crime trends.</p>
+
+    <!-- Toggle Buttons -->
+    <div class="flex gap-4 mb-8">
+      <button id="toggleChart" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 font-semibold">Actual vs Forecast</button>
+      <button id="toggleEthics" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-blue-500 font-semibold">Show/Hide Ethical Note</button>
+      <button id="exportPDF" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-semibold">Export PDF</button>
+      <button id="exportCSV" class="px-4 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-700 font-semibold">Export CSV</button>
+    </div>
+
+    <!-- Predictive Crime Hotspot Map -->
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-300 mb-2">Predictive Crime Hotspot Map</h2>
+      <div id="hotspotMap" class="w-full h-96 rounded-lg overflow-hidden mb-4"></div>
+      <p class="text-gray-400">Interactive map showing predicted crime hotspots using machine learning (sample data).</p>
+    </div>
+
+    <!-- Time-series Forecast Chart -->
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-300 mb-2">Crime Count Forecast (Next 6 Months)</h2>
+      <canvas id="forecastChart" class="w-full h-64"></canvas>
+      <p class="text-gray-400">Forecast generated using ARIMA/ML models (sample data).</p>
+    </div>
+
+    <!-- Pattern Detection Visualization -->
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-300 mb-2">Recurring Crime Patterns</h2>
+      <div id="patternVis" class="w-full h-64 bg-gray-800 rounded-lg flex items-center justify-center">
+        <span class="text-gray-400">[Clustering/Highlighting Visualization Placeholder]</span>
+      </div>
+      <p class="text-gray-400">Visualizes repeat locations, times, and offense types.</p>
+    </div>
+
+    <!-- Social Media Sentiment Monitoring -->
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold text-blue-300 mb-2">Social Media Sentiment Monitoring</h2>
+      <div class="flex gap-8">
+        <div class="w-1/2 bg-gray-800 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-2">Sentiment Word Cloud</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-600 text-white px-3 py-1 rounded-full">Safe</span>
+            <span class="bg-red-600 text-white px-3 py-1 rounded-full">Danger</span>
+            <span class="bg-yellow-500 text-white px-3 py-1 rounded-full">Alert</span>
+            <span class="bg-green-500 text-white px-3 py-1 rounded-full">Positive</span>
+            <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Suspicious</span>
+          </div>
+        </div>
+        <div class="w-1/2 bg-gray-800 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-2">Flagged Posts/Alerts</h3>
+          <ul class="list-disc ml-6 text-gray-300">
+            <li>"Robbery reported near Station Road."</li>
+            <li>"Unusual activity in Gulshan area."</li>
+            <li>"Police presence increased in Mirpur."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ethical Warning -->
+    <div id="ethicsNote" class="bg-yellow-900 text-yellow-300 rounded-lg p-4 mb-8 hidden">
+      <span class="font-bold">Ethical Warning:</span> AI predictions are not perfect—ensure human oversight and respect privacy. Bias and data limitations may affect results.
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="w-full bg-gray-800 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex flex-col items-start">
+        <span class="font-bold text-lg text-blue-400 mb-2">Contact Info</span>
+        <span class="text-gray-400">Email: ibrahimrafi963@gmail.com</span>
+        <span class="text-gray-400">Phone: +8801560064063</span>
+        <div class="flex gap-4 mt-3">
+          <a href="mailto:ibrahimrafi963@gmail.com" class="text-blue-400 hover:text-blue-600"><i class='bx bxl-gmail text-2xl'></i></a>
+          <a href="https://twitter.com/IBMRAFI4" target="_blank" class="text-blue-400 hover:text-blue-600"><i class='bx bxl-twitter text-2xl'></i> @IBMRAFI4</a>
+          <a href="tel:+8801560064063" class="text-blue-400 hover:text-blue-600"><i class='bx bxs-phone text-2xl'></i></a>
+        </div>
+      </div>
+      <form class="flex flex-col items-start gap-2 w-full md:w-auto">
+        <label for="subscribe" class="text-gray-400">Subscribe for updates</label>
+        <div class="flex gap-2">
+          <input type="email" id="subscribe" name="subscribe" placeholder="Your email" class="px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold">Subscribe</button>
+        </div>
+      </form>
+    </div>
+    <div class="text-center text-gray-500 text-sm mt-6">&copy; 2025 CrimeDataAI. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // Leaflet Hotspot Map (Sample Markers)
+    var map = L.map('hotspotMap').setView([23.6850, 90.3563], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    // Sample predicted hotspots
+    L.marker([23.8103, 90.4125]).addTo(map).bindPopup('Dhaka: Predicted Hotspot');
+    L.marker([22.3569, 91.7832]).addTo(map).bindPopup('Chattogram: Predicted Hotspot');
+    L.marker([24.9045, 91.8611]).addTo(map).bindPopup('Sylhet: Predicted Hotspot');
+    L.marker([25.7439, 89.2752]).addTo(map).bindPopup('Rangpur: Predicted Hotspot');
+    L.marker([22.8456, 89.5403]).addTo(map).bindPopup('Khulna: Predicted Hotspot');
+    L.marker([22.7010, 90.3535]).addTo(map).bindPopup('Barisal: Predicted Hotspot');
+    L.marker([24.7471, 90.4203]).addTo(map).bindPopup('Mymensingh: Predicted Hotspot');
+
+    // Chart.js Forecast Chart (Sample Data)
+    const ctx = document.getElementById('forecastChart').getContext('2d');
+    const forecastChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+        datasets: [
+          {
+            label: 'Actual',
+            data: [120, 135, 150, 160, 170, 180, 190, 200],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Forecast',
+            data: [200, 210, 220, 230, 240, 250, 260, 270],
+            borderColor: '#f59e42',
+            backgroundColor: 'rgba(245, 158, 66, 0.2)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, labels: { color: '#fff' } },
+          title: {
+            display: true,
+            text: 'Crime Count Forecast',
+            color: '#fff',
+            font: { size: 18 }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#fff' }, grid: { color: '#374151' } },
+          y: { ticks: { color: '#fff' }, grid: { color: '#374151' } }
+        }
+      }
+    });
+
+    // Toggle Chart Actual vs Forecast
+    document.getElementById('toggleChart').onclick = function() {
+      forecastChart.data.datasets[0].hidden = !forecastChart.data.datasets[0].hidden;
+      forecastChart.data.datasets[1].hidden = !forecastChart.data.datasets[1].hidden;
+      forecastChart.update();
+    };
+
+    // Toggle Ethical Note
+    document.getElementById('toggleEthics').onclick = function() {
+      var ethicsNote = document.getElementById('ethicsNote');
+      ethicsNote.classList.toggle('hidden');
+    };
+
+    // Export PDF (simple print for demo)
+    document.getElementById('exportPDF').onclick = function() {
+      window.print();
+    };
+
+    // Export CSV (sample data)
+    document.getElementById('exportCSV').onclick = function() {
+      var csv = 'Month,Actual,Forecast\n';
+      var months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
+      var actual = [120, 135, 150, 160, 170, 180, 190, 200];
+      var forecast = [200, 210, 220, 230, 240, 250, 260, 270];
+      for (var i = 0; i < months.length; i++) {
+        csv += months[i] + ',' + actual[i] + ',' + forecast[i] + '\n';
+      }
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'crime_forecast.csv';
+      link.click();
+    };
+  </script>
+</body>
+</html>

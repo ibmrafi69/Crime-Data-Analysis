@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bangladesh Police Phone Numbers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 480px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #0002;
+      padding: 40px 32px 32px 32px;
+      position: relative;
+    }
+    h2 {
+      text-align: center;
+      color: #9333ea;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      letter-spacing: 1px;
+    }
+    label {
+      font-weight: 600;
+      color: #2563eb;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1.05rem;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      font-size: 1rem;
+      background: #f9fafb;
+      margin-bottom: 8px;
+      transition: border 0.2s;
+    }
+    select:focus, input:focus {
+      border-color: #9333ea;
+      outline: none;
+      background: #fff;
+    }
+    .result {
+      margin-top: 28px;
+      padding: 18px;
+      background: #e0e7ff;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.15em;
+      color: #1e293b;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #3b82f644;
+      letter-spacing: 0.5px;
+    }
+    .back-btn {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 18px 8px 12px;
+      font-size: 1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px #ef444444;
+      transition: background 0.2s;
+      z-index: 1000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .back-btn:hover {
+      background: #dc2626;
+    }
+    .back-icon {
+      font-size: 1.2em;
+      margin-right: 4px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 18px 6px 18px 6px; }
+      h2 { font-size: 1.2rem; }
+      .back-btn { top: 8px; right: 8px; padding: 6px 12px 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div style="position:fixed; top:18px; right:18px; z-index:1000;">
+    <button class="back-btn" onclick="goBack()" title="Back" style="padding:6px 14px 6px 10px; font-size:0.95em; border-radius:30px; box-shadow:0 2px 8px #ef444444;">
+      <span class="back-icon" style="font-size:1em;"><i class='bx bx-arrow-back'></i></span> Back
+    </button>
+  </div>
+  <div class="container">
+    <h2><i class='bx bxs-phone-call'></i> Bangladesh Police Phone Numbers</h2>
+    <label for="division"><i class='bx bxs-map'></i> Division</label>
+    <select id="division"><option value="">Select Division</option></select>
+    <label for="district"><i class='bx bxs-map-pin'></i> District</label>
+    <select id="district"><option value="">Select District</option></select>
+    <label for="thana"><i class='bx bxs-map-alt'></i> Thana</label>
+    <select id="thana"><option value="">Select Thana</option></select>
+    <div class="result" id="phoneResult"></div>
+  </div>
+  <script>
+    function goBack() {
+      if (window.history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = "reports.html";
+      }
+    }
+
+    let policeData = [];
+    let divisionSelect = document.getElementById('division');
+    let districtSelect = document.getElementById('district');
+    let thanaSelect = document.getElementById('thana');
+    let phoneResult = document.getElementById('phoneResult');
+
+    fetch('pl num.json')
+      .then(res => res.json())
+      .then(data => {
+        policeData = data;
+        populateDivisions();
+      });
+
+    function populateDivisions() {
+      const divisions = [...new Set(policeData.map(d => d.division))].sort();
+      divisionSelect.innerHTML = '<option value="">Select Division</option>' +
+        divisions.map(div => `<option value="${div}">${div}</option>`).join('');
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      thanaSelect.innerHTML = '<option value="">Select Thana</option>';
+      phoneResult.textContent = '';
+    }
+
+    divisionSelect.addEventListener('change', function() {
+      const selectedDivision = this.value;
+      const districts = [...new Set(policeData.filter(d => d.division === selectedDivision).map(d => d.district))].sort();
+      districtSelect.innerHTML = '<option value="">Select District</option>' +
+        districts.map(dis => `<option value="${dis}">${dis}</option>`).join('');
+      thanaSelect.innerHTML = '<option value="">Select Thana</option>';
+      phoneResult.textContent = '';
+    });
+
+    districtSelect.addEventListener('change', function() {
+      const selectedDivision = divisionSelect.value;
+      const selectedDistrict = this.value;
+      const thanas = [...new Set(policeData.filter(d => d.division === selectedDivision && d.district === selectedDistrict).map(d => d.thana))].sort();
+      thanaSelect.innerHTML = '<option value="">Select Thana</option>' +
+        thanas.map(thana => `<option value="${thana}">${thana}</option>`).join('');
+      phoneResult.textContent = '';
+    });
+
+    thanaSelect.addEventListener('change', function() {
+      const selectedDivision = divisionSelect.value;
+      const selectedDistrict = districtSelect.value;
+      const selectedThana = this.value;
+      const found = policeData.find(d =>
+        d.division === selectedDivision &&
+        d.district === selectedDistrict &&
+        d.thana === selectedThana
+      );
+      phoneResult.innerHTML = found
+        ? `<span style="color:#2563eb;"><i class='bx bxs-phone'></i> Phone:</span> <span style="font-weight:bold;">${found.phone}</span>`
+        : '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrimeDataAI Navbar</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0f172a; /* Dark background like your UI */
+    }
+
+    /* Navbar container */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1e293b;
+      padding: 12px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Logo */
+    .navbar .logo {
+      color: #3b82f6;
+    font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* Nav links */
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+      gap: 25px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      transition: 0.2s;
+    font-size: 18px;
+
+    transition: 0.3s;
+      color: #3b82f6;
+    }
+
+    /* Auth buttons */
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-buttons a {
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s;
+      background-color: #374151;
+      color: white;
+    }
+
+    .login-btn:hover {
+      background-color: #4b5563;
+    }
+
+    .register-btn {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .register-btn:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">CrimeDataAI</a>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="data.html">Data</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="reports.html">Reports</a></li>
+      <li><a href="AI Insights.html">AI Insights</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="auth-buttons">
+      <a href="sign in.html" class="login-btn">Login</a>
+      <a href="sign up.html" class="register-btn">Register</a>
+    </div>
+  </nav>
+
+  <script>
+  // Highlight current page link in navbar
+  function highlightCurrentNav() {
+    var path = window.location.pathname.split('/').pop();
+    var links = document.querySelectorAll('.navbar ul li a');
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.style.fontWeight = 'bold';
+        link.style.color = '#fff';
+        link.style.textDecoration = 'none';
+      } else {
+        link.style.color = '#3b82f6';
+        link.style.fontWeight = 'normal';
+        link.style.textDecoration = 'none';
+      }
+    });
+  }
+  highlightCurrentNav();
+</script>
+</body>
+</html>

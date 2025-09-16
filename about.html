@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Crime Data Analysis</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+  <div id="navbar-container"></div>
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+  </script>
+
+  <!-- Section 1: About the Crime Data Analysis Project -->
+  <!-- Context Section: Bangladesh Version -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Bangladesh Crime Data Context</h2>
+    <p class="text-gray-300 text-lg mb-2">Crime data in Bangladesh is published yearly by Bangladesh Police and the Bangladesh Bureau of Statistics (BBS), covering national, divisional, district, and upazila levels. Key crime types include dacoity, robbery, murder, narcotics, gender-based violence, and more.</p>
+  </section>
+  <section class="max-w-4xl mx-auto mt-10 mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h1 class="text-3xl font-bold text-blue-400 mb-4">About the Crime Data Analysis Project</h1>
+    <p class="text-gray-300 text-lg">This project analyzes crime data in Bangladesh. The purpose is to enable users to see crime trends (male vs female victims, yearly data, district-wise crime rate) and visualize them with charts, tables, and graphs.</p>
+  </section>
+
+  <!-- Section 2: Who We Are -->
+  <!-- Methodology Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Methodology</h2>
+    <p class="text-gray-300 text-lg mb-2">Sources include Bangladesh Police official reports, BBS demographic statistics, NGO reports, and media data. Data is collected from police stations, aggregated at district/division level, and inconsistencies are handled using secondary estimations. A glossary for local crime terminology (GD, FIR, case types) will be included.</p>
+  </section>
+  <!-- Data Caveats Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Data Caveats</h2>
+    <p class="text-gray-300 text-lg mb-2">Issues include delayed reporting from some police stations, underreporting, and limited public data access. Data is aggregated from 64 districts and metropolitan areas, including Dhaka and Chattogram, based on official publications by Bangladesh Police Headquarters or BBS summaries.</p>
+  </section>
+  <!-- Supplementing Data Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Supplementing Data</h2>
+    <p class="text-gray-300 text-lg mb-2">Missing reports from upazilas or stations are estimated using divisional summaries. Some upazilas report late, but division-level annual summaries are used to fill gaps for more complete analysis.</p>
+  </section>
+  <!-- Non-Crime Data Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Non-Crime Data</h2>
+    <p class="text-gray-300 text-lg mb-2">Population data is sourced from BBS, and administrative boundaries (divisions, districts, upazilas) are defined according to government records.</p>
+  </section>
+  <!-- Transparency & Contact Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Transparency & Contact</h2>
+    <p class="text-gray-300 text-lg mb-2">Code and data for this project are open-source. For questions or collaboration, contact the team at <span class="text-blue-400">ibrahimrafi963@gmail.com</span>.</p>
+  </section>
+  <!-- Caution Against Ranking Section -->
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Caution Against Ranking</h2>
+    <p class="text-gray-300 text-lg mb-2">Bangladesh Police and BBS discourage direct ranking of districts due to variation in reporting practices and population base. Data should be interpreted with caution and in context.</p>
+  </section>
+  <section class="max-w-4xl mx-auto mb-8 bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-blue-400 mb-4">Who We Are</h2>
+    <p class="text-gray-300 text-lg">This project is developed by our team as part of a research and academic initiative to make crime statistics more accessible and visual for everyone.</p>
+  </section>
+
+      <div class="grid grid-cols-5 gap-6 items-center justify-center">
+  <!-- Team Member 1 -->
+  <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-2xl transition w-56 h-80">
+          <img src="male.jpg" alt="Designer" class="w-28 h-28 object-cover rounded-full mb-3 border-4 border-blue-400">
+          <span class="font-extrabold text-2xl text-white mb-1">Ibrahim Kholil</span>
+          <span class="text-gray-400 text-sm mb-1">ID: 41230301407</span>
+          <span class="font-semibold text-blue-400 text-base px-2 py-1 rounded">Designer</span>
+        </div>
+    </section>
+      <!-- Footer -->
+  <!-- Team Member 2 -->
+  <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-2xl transition w-56 h-80">
+          <img src="male.jpg" alt="Developer" class="w-28 h-28 object-cover rounded-full mb-3 border-4 border-green-400">
+          <span class="font-extrabold text-2xl text-white mb-1">Mehedi Hasan Munna</span>
+          <span class="text-gray-400 text-sm mb-1">ID: 41230301675</span>
+          <span class="font-semibold text-green-400 text-base px-2 py-1 rounded">Developer</span>
+        </div>
+  <!-- Team Member 3 -->
+  <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-2xl transition w-56 h-80">
+          <img src="famele.jpg" alt="Data Analyst" class="w-28 h-28 object-cover rounded-full mb-3 border-4 border-purple-400">
+          <span class="font-extrabold text-2xl text-white mb-1">Mst. Nilufa Khatun</span>
+          <span class="text-gray-400 text-sm mb-1">ID: 41230301424</span>
+          <span class="font-semibold text-purple-400 text-base px-2 py-1 rounded">Data Analyst</span>
+        </div>
+  <!-- Team Member 4 -->
+  <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-2xl transition w-56 h-80">
+          <img src="famele.jpg" alt="Researcher" class="w-28 h-28 object-cover rounded-full mb-3 border-4 border-yellow-400">
+          <span class="font-extrabold text-2xl text-white mb-1">Israt Jahan</span>
+          <span class="text-gray-400 text-sm mb-1">ID: 41230301568</span>
+          <span class="font-semibold text-yellow-400 text-base px-2 py-1 rounded">Researcher</span>
+        </div>
+  <!-- Team Member 5 -->
+  <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-2xl transition w-56 h-80">
+          <img src="famele.jpg" alt="Project Lead" class="w-28 h-28 object-cover rounded-full mb-3 border-4 border-orange-400">
+          <span class="font-extrabold text-2xl text-white mb-1">Mst. Tanjina Akter Smrity</span>
+          <span class="text-gray-400 text-sm mb-1">ID: 41230301714</span>
+          <span class="font-semibold text-orange-400 text-base px-2 py-1 rounded">Project Lead</span>
+        </div>
+      </div>
+</html>

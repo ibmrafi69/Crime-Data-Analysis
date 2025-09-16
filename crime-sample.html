@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Crime Data (API)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%); min-height: 100vh; }
+    </style>
+</head>
+<body>
+    <div class="flex justify-end max-w-4xl mx-auto pt-6">
+        <a href="index.html" title="Leave" class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow transition">
+            <i class='bx bx-log-out text-2xl'></i> Leave
+        </a>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <h1 class="text-3xl font-bold text-blue-400 mb-8 text-center">Sample/Dummy Crime Data (API)</h1>
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <button id="fetchBtn" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow transition mb-4">Fetch Sample Data</button>
+            <button id="importBtn" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow transition mb-4">Import to Crime Entry</button>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-100">
+                        <th class="p-2">Type</th>
+                        <th class="p-2">Location</th>
+                        <th class="p-2">Date</th>
+                        <th class="p-2">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="sampleTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        let sampleData = [];
+        document.getElementById('fetchBtn').onclick = async function() {
+            // Dummy API for demonstration
+            const res = await fetch('https://mocki.io/v1/7e7e2e2a-2e2e-4e2e-8e2e-2e2e2e2e2e2e');
+            sampleData = await res.json();
+            const tbody = document.getElementById('sampleTableBody');
+            tbody.innerHTML = '';
+            sampleData.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class='p-2'>${c.crimeType}</td><td class='p-2'>${c.location}</td><td class='p-2'>${c.date}</td><td class='p-2'>${c.description}</td>`;
+                tbody.appendChild(tr);
+            });
+        };
+        document.getElementById('importBtn').onclick = function() {
+            if (!sampleData.length) { alert('Fetch data first!'); return; }
+            let crimes = JSON.parse(localStorage.getItem('crimes') || '[]');
+            // Only store year and month from sample data
+            sampleData.forEach(c => {
+                let year = '';
+                let month = '';
+                if (c.date) {
+                    const d = new Date(c.date);
+                    year = d.getFullYear();
+                    month = d.toLocaleString('default', { month: 'long' });
+                }
+                if (year && month) {
+                    crimes.push({ year, month });
+                }
+            });
+            localStorage.setItem('crimes', JSON.stringify(crimes));
+            alert('Sample year/month data imported! Now check Crime Entry or Visualization.');
+        };
+    </script>
+</body>
+</html>

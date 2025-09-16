@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Crime News - Bangladesh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #111827; color: #fff; }
+    .news-list { max-width: 900px; margin: 40px auto; background: #1f2937; border-radius: 16px; box-shadow: 0 2px 12px #0004; padding: 32px 24px; }
+    .news-title { font-size: 2rem; font-weight: bold; color: #3b82f6; margin-bottom: 18px; text-align: center; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .news-card { background: #232b3a; border-radius: 12px; box-shadow: 0 2px 8px #0002; padding: 18px 16px; cursor: pointer; border-left: 5px solid #3b82f6; transition: background 0.2s; display: flex; flex-direction: column; }
+    .news-card:hover { background: #374151; }
+    .news-headline { font-size: 1.08rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
+    .news-meta { font-size: 0.95rem; color: #93c5fd; margin-bottom: 2px; }
+    .news-summary { font-size: 0.98rem; color: #cbd5e1; margin-bottom: 6px; }
+    .empty { text-align: center; color: #94a3b8; margin-top: 40px; }
+    .badge { position: fixed; top: 18px; right: 28px; background: #3b82f6; color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 1rem; z-index: 1001; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .back-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: bold; /* Make text bold */
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px #0006; /* Add shadow for contrast */
+      letter-spacing: 0.5px; /* Slight spacing for clarity */
+    }
+    .back-btn:hover { background: #dc2626; }
+    /* Modal styles */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(30,41,59,0.85); z-index: 2000; display: none; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: #232b3a; color: #fff; border-radius: 14px; padding: 28px 24px; max-width: 400px; box-shadow: 0 4px 24px #0007;
+      font-size: 1rem; position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 14px; background: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; cursor: pointer;
+    }
+    .modal-close:hover { background: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="news-list">
+    <div class="top-bar">
+      <button class="back-btn" onclick="window.location.href='reports.html'">&#8592; Back</button>
+      <span class="badge" id="badge" style="display:none;"></span>
+    </div>
+    <div class="news-title">Live Crime News (Bangladesh)</div>
+    
+    <!-- News Insert Form -->
+    <form id="newsForm" style="background:#232b3a;padding:18px 16px;border-radius:12px;margin-bottom:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <select name="division" required style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+          <option value="">Select Division</option>
+          <option value="Dhaka">Dhaka</option>
+          <option value="Chattogram">Chattogram</option>
+          <option value="Khulna">Khulna</option>
+          <option value="Rajshahi">Rajshahi</option>
+          <option value="Barisal">Barisal</option>
+          <option value="Sylhet">Sylhet</option>
+          <option value="Mymensingh">Mymensingh</option>
+          <option value="Rangpur">Rangpur</option>
+        </select>
+        <select name="district" id="districtSelect" required style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+          <option value="">Select District</option>
+          <!-- Districts will be populated by JS -->
+        </select>
+        <select name="thana" id="thanaSelect" required style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+          <option value="">Select Thana</option>
+          <!-- Thanas will be populated by JS -->
+        </select>
+        <input type="date" name="date" required style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+        <select name="crime_type" required style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+          <option value="">Select Crime Type</option>
+          <option value="Robbery">Robbery</option>
+          <option value="Murder">Murder</option>
+          <option value="Kidnapping">Kidnapping</option>
+          <option value="Assault">Assault</option>
+          <option value="Theft">Theft</option>
+          <option value="Fraud">Fraud</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="source" placeholder="Source (URL or name)" style="padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;">
+      </div>
+      <textarea name="details" placeholder="Details" required style="margin-top:12px;width:100%;padding:8px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#fff;"></textarea>
+      <button type="submit" style="margin-top:12px;background:#2563eb;color:#fff;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;">Add News</button>
+      <span id="formMsg" style="margin-left:16px;color:#22c55e;font-weight:bold;"></span>
+    </form>
+    
+    <div id="newsGrid" class="news-grid"></div>
+    <div id="emptyMsg" class="empty" style="display:none;">No live crime news available.<br>Add new reports from the dashboard.</div>
+  </div>
+  <!-- Modal for details -->
+  <div id="modalBg" class="modal-bg">
+    <div class="modal-content" id="modalContent">
+      <button class="modal-close" onclick="closeModal()">Close</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+  <script>
+    function isBangladesh(entry) {
+      const division = (entry.division || entry.Division || '').toLowerCase();
+      const bdDivisions = [
+        "dhaka","chattogram","khulna","rajshahi","barisal","sylhet","mymensingh","rangpur"
+      ];
+      return bdDivisions.some(d => division.includes(d));
+    }
+
+    function getCrimeNews() {
+      let crimes = [];
+      try { crimes = JSON.parse(localStorage.getItem('crimes') || '[]'); }
+      catch { crimes = []; }
+      return crimes.filter(isBangladesh);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, s => (
+        { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]
+      ));
+    }
+
+    function renderNews() {
+      const newsGrid = document.getElementById('newsGrid');
+      const emptyMsg = document.getElementById('emptyMsg');
+      const badge = document.getElementById('badge');
+      const news = getCrimeNews();
+
+      newsGrid.innerHTML = '';
+      if (news.length === 0) {
+        emptyMsg.style.display = 'block';
+        badge.style.display = 'none';
+        return;
+      }
+      emptyMsg.style.display = 'none';
+      badge.style.display = 'inline-block';
+      badge.textContent = `Live News: ${news.length}`;
+
+      news.forEach((item, idx) => {
+        const crimeType = item.crime_type || item.crimeType || item.type || 'Crime';
+        const thana = item.thana || item.Thana || item.ps || '';
+        const district = item.district || item.District || '';
+        const division = item.division || item.Division || '';
+        const details = item.details || item.description || '';
+        const date = item.date || item.Date || '';
+        const headline = `${crimeType} at ${thana}, ${district}, ${division}`;
+        const summary = details.length > 80 ? details.slice(0,77) + '...' : details;
+        const source = item.source || item.Source || '';
+
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', headline);
+
+        card.innerHTML = `
+          <div class="news-headline">${escapeHtml(headline)}</div>
+          <div class="news-meta">${date ? 'Date: ' + escapeHtml(date) : ''}</div>
+          <div class="news-summary">${escapeHtml(summary)}</div>
+          ${source ? `<div class="news-meta">Source: ${escapeHtml(source)}</div>` : ''}
+        `;
+
+        card.onclick = () => showModal({
+          headline, date, division, district, thana, crimeType, details, source
+        });
+
+        newsGrid.appendChild(card);
+      });
+    }
+
+    function showModal(data) {
+      document.getElementById('modalBg').style.display = 'flex';
+      document.getElementById('modalBody').innerHTML = `
+        <div style="font-weight:bold;font-size:1.1rem;margin-bottom:8px;">${escapeHtml(data.headline)}</div>
+        <div style="color:#93c5fd;margin-bottom:6px;">${data.date ? 'Date: ' + escapeHtml(data.date) : ''}</div>
+        <div><strong>Division:</strong> ${escapeHtml(data.division)}</div>
+        <div><strong>District:</strong> ${escapeHtml(data.district)}</div>
+        <div><strong>Thana:</strong> ${escapeHtml(data.thana)}</div>
+        <div><strong>Type:</strong> ${escapeHtml(data.crimeType)}</div>
+        <div style="margin-top:10px;"><strong>Details:</strong> ${escapeHtml(data.details)}</div>
+        ${data.source ? `<div style="margin-top:10px;color:#3b82f6;"><strong>Source:</strong> ${escapeHtml(data.source)}</div>` : ''}
+      `;
+    }
+    function closeModal() {
+      document.getElementById('modalBg').style.display = 'none';
+    }
+
+    // News Insert Form Handler
+    document.getElementById('newsForm').onsubmit = function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const formMsg = document.getElementById('formMsg');
+
+      fetch('insert_news.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          formMsg.textContent = data.message;
+          formMsg.style.color = "#22c55e";
+          form.reset();
+          renderNewsFromDB(); // নতুন function: DB থেকে fetch করে দেখাবে
+        } else {
+          formMsg.textContent = data.message;
+          formMsg.style.color = "#ef4444";
+        }
+        setTimeout(() => formMsg.textContent='', 2000);
+      })
+      .catch(err => console.error(err));
+    };
+
+    function renderNewsFromDB() {
+      fetch('fetch_news.php')
+        .then(res => res.json())
+        .then(news => {
+          const newsGrid = document.getElementById('newsGrid');
+          const emptyMsg = document.getElementById('emptyMsg');
+          const badge = document.getElementById('badge');
+          newsGrid.innerHTML = '';
+          if (!news || news.length === 0) {
+            emptyMsg.style.display = 'block';
+            badge.style.display = 'none';
+            return;
+          }
+          emptyMsg.style.display = 'none';
+          badge.style.display = 'inline-block';
+          badge.textContent = `Live News: ${news.length}`;
+          news.forEach(item => {
+            const headline = `${item.crime_type} at ${item.thana}, ${item.district}, ${item.division}`;
+            const summary = item.details.length > 80 ? item.details.slice(0,77) + '...' : item.details;
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.tabIndex = 0;
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', headline);
+            card.innerHTML = `
+              <div class="news-headline">${headline}</div>
+              <div class="news-meta">${item.date ? 'Date: ' + item.date : ''}</div>
+              <div class="news-summary">${summary}</div>
+              ${item.source ? `<div class="news-meta">Source: ${item.source}</div>` : ''}
+            `;
+            card.onclick = () => showModal(item);
+            newsGrid.appendChild(card);
+          });
+        });
+    }
+
+    // Replace renderNews() with renderNewsFromDB() on page load
+    renderNewsFromDB();
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'crimes') renderNews();
+    });
+
+    // Sample data addition for testing
+    let crimes = JSON.parse(localStorage.getItem('crimes') || '[]');
+    crimes.push({
+      division: "Dhaka",
+      district: "Dhaka",
+      thana: "Dhanmondi",
+      crime_type: "Robbery",
+      details: "Armed robbery at Dhanmondi market.",
+      date: "2025-09-09",
+      source: "bdcrime.com"
+    });
+    localStorage.setItem('crimes', JSON.stringify(crimes));
+
+    // Sample data for districts and thanas (expand as needed)
+    const bdData = {
+      Dhaka: {
+        districts: {
+          Dhaka: ["Dhanmondi", "Gulshan", "Mirpur", "Uttara"],
+          Gazipur: ["Tongi", "Sreepur"],
+          Narayanganj: ["Fatullah", "Rupganj"]
+        }
+      },
+      Chattogram: {
+        districts: {
+          Chattogram: ["Kotwali", "Pahartali", "Halishahar"],
+          CoxsBazar: ["Cox's Bazar Sadar", "Teknaf"]
+        }
+      },
+      // Add other divisions/districts/thanas as needed
+    };
+
+    const divisionSelect = document.querySelector('select[name="division"]');
+    const districtSelect = document.getElementById('districtSelect');
+    const thanaSelect = document.getElementById('thanaSelect');
+
+    divisionSelect.addEventListener('change', function() {
+      const division = this.value;
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      thanaSelect.innerHTML = '<option value="">Select Thana</option>';
+      if (bdData[division]) {
+        Object.keys(bdData[division].districts).forEach(district => {
+          const opt = document.createElement('option');
+          opt.value = district;
+          opt.textContent = district;
+          districtSelect.appendChild(opt);
+        });
+      }
+    });
+
+    districtSelect.addEventListener('change', function() {
+      const division = divisionSelect.value;
+      const district = this.value;
+      thanaSelect.innerHTML = '<option value="">Select Thana</option>';
+      if (bdData[division] && bdData[division].districts[district]) {
+        bdData[division].districts[district].forEach(thana => {
+          const opt = document.createElement('option');
+          opt.value = thana;
+          opt.textContent = thana;
+          thanaSelect.appendChild(opt);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

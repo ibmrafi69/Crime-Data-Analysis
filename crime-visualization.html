@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Data Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%); min-height: 100vh; }
+    </style>
+</head>
+<body>
+    <div class="flex justify-end max-w-6xl mx-auto px-4 pt-6">
+        <a href="index.html" title="Leave" class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow transition">
+            <i class='bx bx-log-out text-2xl'></i> Leave
+        </a>
+    </div>
+    <div class="max-w-6xl mx-auto px-4 py-10">
+        <h1 class="text-3xl font-bold text-blue-400 mb-8 text-center">Crime Data Visualization</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-blue-600 mb-4">Crime Type Distribution</h2>
+                <canvas id="crimeTypeChart" height="200"></canvas>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-blue-600 mb-4">Crime Locations</h2>
+                <div id="map" style="height: 300px; border-radius: 12px;"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-blue-600 mb-4">Crime Data Table</h2>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-100">
+                        <th class="p-2">Type</th>
+                        <th class="p-2">Location</th>
+                        <th class="p-2">Date</th>
+                        <th class="p-2">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="crimeTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // Fetch crime data from localStorage
+        const crimes = JSON.parse(localStorage.getItem('crimes') || '[]');
+        // Chart.js: Crime Type Distribution
+        const typeCounts = {};
+        crimes.forEach(c => {
+            typeCounts[c.crimeType] = (typeCounts[c.crimeType] || 0) + 1;
+        });
+        const ctx = document.getElementById('crimeTypeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(typeCounts),
+                datasets: [{
+                    data: Object.values(typeCounts),
+                    backgroundColor: ['#3b82f6','#9333ea','#f59e42','#10b981','#ef4444'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+        // Table: Crime Data
+        const tbody = document.getElementById('crimeTableBody');
+        crimes.forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td class="p-2">${c.crimeType}</td><td class="p-2">${c.location}</td><td class="p-2">${c.date}</td><td class="p-2">${c.description}</td>`;
+            tbody.appendChild(tr);
+        });
+        // Leaflet.js: Show locations (simple markers, no geocoding)
+        const map = L.map('map').setView([23.8103, 90.4125], 6); // Centered on Bangladesh
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        crimes.forEach(c => {
+            // For demo, randomize marker location near Dhaka
+            const lat = 23.8103 + (Math.random()-0.5)*2;
+            const lng = 90.4125 + (Math.random()-0.5)*2;
+            L.marker([lat, lng]).addTo(map).bindPopup(`<b>${c.crimeType}</b><br>${c.location}<br>${c.date}`);
+        });
+    </script>
+</body>
+</html>

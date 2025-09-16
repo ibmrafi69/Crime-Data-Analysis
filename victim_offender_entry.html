@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Victim & Offender Data Entry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+      min-height: 100vh;
+    }
+    .section {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #0002;
+      padding: 40px 32px;
+      margin-bottom: 40px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #9333ea;
+      margin-bottom: 24px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    label {
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .input, select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      font-size: 1rem;
+      background: #f9fafb;
+      transition: border 0.2s;
+    }
+    .input:focus, select:focus {
+      border-color: #9333ea;
+      outline: none;
+      background: #fff;
+    }
+    .btn {
+      background: linear-gradient(90deg, #3b82f6 0%, #9333ea 100%);
+      color: #fff;
+      padding: 12px 0;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 100%;
+      box-shadow: 0 2px 8px #9333ea44;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+    }
+    .success {
+      color: #22c55e;
+      font-weight: 600;
+      margin-top: 14px;
+      text-align: center;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .icon-title {
+      font-size: 2.5rem;
+      color: #3b82f6;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="flex justify-end max-w-xl mx-auto pt-6">
+    <a href="reports.html" class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow transition" title="Back">
+      <i class='bx bx-arrow-back text-2xl'></i> Back
+    </a>
+  </div>
+  <div class="section">
+    <div class="icon-title"><i class='bx bxs-user-detail'></i></div>
+    <div class="section-title">Victim & Offender Data Entry</div>
+    <form id="profileForm" autocomplete="off">
+      <div class="form-group">
+        <label for="type"><i class='bx bxs-user'></i> Profile Type</label>
+        <select name="type" id="type" required>
+          <option value="">Select</option>
+          <option value="Victim">Victim</option>
+          <option value="Offender">Offender</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="age"><i class='bx bxs-hourglass'></i> Age Group</label>
+        <select name="age" id="age" required>
+          <option value="">Select</option>
+          <option value="0-18">0-18</option>
+          <option value="19-30">19-30</option>
+          <option value="31-45">31-45</option>
+          <option value="46-60">46-60</option>
+          <option value="60+">60+</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gender"><i class='bx bxs-user-voice'></i> Gender</label>
+        <select name="gender" id="gender" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="occupation"><i class='bx bxs-briefcase'></i> Occupation</label>
+        <select id="occupation_select" class="input" style="margin-bottom:8px;">
+          <option value="">Select Occupation</option>
+          <option value="Student">Student</option>
+          <option value="Service">Service</option>
+          <option value="Business">Business</option>
+          <option value="Homemaker">Homemaker</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="occupation" id="occupation" class="input" placeholder="Or write occupation" required>
+      </div>
+      <button type="submit" class="btn"><i class='bx bxs-save'></i> Save Data</button>
+      <div id="formMsg" class="success"></div>
+    </form>
+  </div>
+  <script>
+    // If user selects from dropdown, fill input
+    document.getElementById('occupation_select').addEventListener('change', function() {
+      const val = this.value;
+      if(val) document.getElementById('occupation').value = val;
+      else document.getElementById('occupation').value = '';
+    });
+
+    document.getElementById('profileForm').onsubmit = function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formMsg = document.getElementById('formMsg');
+      const data = {
+        type: form.type.value,
+        age: form.age.value,
+        gender: form.gender.value,
+        occupation: form.occupation.value
+      };
+      let profiles = [];
+      try { profiles = JSON.parse(localStorage.getItem('profiles') || '[]'); } catch { profiles = []; }
+      profiles.push(data);
+      localStorage.setItem('profiles', JSON.stringify(profiles));
+      formMsg.textContent = "✅ Data saved successfully!";
+      form.reset();
+      document.getElementById('occupation_select').value = '';
+      setTimeout(() => formMsg.textContent = '', 2000);
+    };
+  </script>
+</body>
+</html>

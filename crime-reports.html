@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Reports</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%); min-height: 100vh; }
+    </style>
+</head>
+<body>
+    <div class="flex justify-end max-w-5xl mx-auto pt-6">
+        <a href="index.html" title="Leave" class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow transition">
+            <i class='bx bx-log-out text-2xl'></i> Leave
+        </a>
+    </div>
+    <div class="max-w-5xl mx-auto px-4 py-10">
+        <h1 class="text-4xl font-extrabold text-blue-600 mb-4 text-center">Crime Data Professional Report</h1>
+        <div class="flex flex-wrap justify-center gap-8 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 w-64 text-center">
+                <div class="text-2xl font-bold text-purple-600 mb-2">Total Records</div>
+                <div class="text-4xl font-extrabold text-blue-500"> <span id="totalRecords">0</span> </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 w-64 text-center">
+                <div class="text-2xl font-bold text-purple-600 mb-2">Years Covered</div>
+                <div class="text-2xl font-extrabold text-blue-500"> <span id="yearsCovered">0</span> </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 w-64 text-center">
+                <div class="text-2xl font-bold text-purple-600 mb-2">Months Covered</div>
+                <div class="text-2xl font-extrabold text-blue-500"> <span id="monthsCovered">0</span> </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex flex-wrap gap-4 mb-4 items-center">
+                <select id="filterYear" class="px-4 py-2 rounded-lg border-2 border-blue-300">
+                    <option value="">All Years</option>
+                </select>
+                <select id="filterMonth" class="px-4 py-2 rounded-lg border-2 border-blue-300">
+                    <option value="">All Months</option>
+                </select>
+                <select id="filterType" class="px-4 py-2 rounded-lg border-2 border-blue-300">
+                    <option value="">All Types</option>
+                </select>
+                <select id="filterLocation" class="px-4 py-2 rounded-lg border-2 border-blue-300">
+                    <option value="">All Locations</option>
+                </select>
+                <button id="exportBtn" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow transition flex items-center gap-2">
+                    <i class='bx bxs-file-pdf text-xl'></i> Export PDF
+                </button>
+            </div>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-100">
+                        <th class="p-2">#</th>
+                        <th class="p-2">Year</th>
+                        <th class="p-2">Month</th>
+                        <th class="p-2">Type</th>
+                        <th class="p-2">Location</th>
+                        <th class="p-2">Date</th>
+                        <th class="p-2">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // Fetch crime data from localStorage
+        const crimes = JSON.parse(localStorage.getItem('crimes') || '[]');
+        // Summary stats
+        document.getElementById('totalRecords').textContent = crimes.length;
+        document.getElementById('yearsCovered').textContent = [...new Set(crimes.map(c => c.year))].length;
+        document.getElementById('monthsCovered').textContent = [...new Set(crimes.map(c => c.month))].length;
+        // Populate filter dropdowns
+        const years = [...new Set(crimes.map(c => c.year))].filter(Boolean);
+        const months = [...new Set(crimes.map(c => c.month))].filter(Boolean);
+        const types = [...new Set(crimes.map(c => c.crimeType))].filter(Boolean);
+        const locations = [...new Set(crimes.map(c => c.location))].filter(Boolean);
+        const filterYear = document.getElementById('filterYear');
+        const filterMonth = document.getElementById('filterMonth');
+        const filterType = document.getElementById('filterType');
+        const filterLocation = document.getElementById('filterLocation');
+        years.forEach(y => {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            filterYear.appendChild(opt);
+        });
+        months.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            filterMonth.appendChild(opt);
+        });
+        types.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            filterType.appendChild(opt);
+        });
+        locations.forEach(l => {
+            const opt = document.createElement('option');
+            opt.value = l;
+            opt.textContent = l;
+            filterLocation.appendChild(opt);
+        });
+        function renderTable() {
+            const yearVal = filterYear.value;
+            const monthVal = filterMonth.value;
+            const typeVal = filterType.value;
+            const locationVal = filterLocation.value;
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+            let filtered = crimes.filter(c => {
+                return (!yearVal || c.year == yearVal) && (!monthVal || c.month == monthVal) && (!typeVal || c.crimeType == typeVal) && (!locationVal || c.location == locationVal);
+            });
+            filtered.forEach((c, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class='p-2'>${i+1}</td><td class='p-2'>${c.year||''}</td><td class='p-2'>${c.month||''}</td><td class='p-2'>${c.crimeType||''}</td><td class='p-2'>${c.location||''}</td><td class='p-2'>${c.date||''}</td><td class='p-2'>${c.description||''}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+        filterYear.onchange = filterMonth.onchange = filterType.onchange = filterLocation.onchange = renderTable;
+        renderTable();
+        // Export as PDF
+        document.getElementById('exportBtn').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFont('Inter');
+            doc.setFontSize(18);
+            doc.text('Crime Data Professional Report', 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Total Records: ${crimes.length}`, 10, 20);
+            doc.text(`Years Covered: ${[...new Set(crimes.map(c => c.year))].length}`, 10, 28);
+            doc.text(`Months Covered: ${[...new Set(crimes.map(c => c.month))].length}`, 10, 36);
+            let y = 48;
+            doc.setFontSize(12);
+            doc.text('No.', 10, y);
+            doc.text('Year', 25, y);
+            doc.text('Month', 40, y);
+            doc.text('Type', 65, y);
+            doc.text('Location', 90, y);
+            doc.text('Date', 120, y);
+            doc.text('Description', 150, y);
+            y += 8;
+            let filtered = crimes.filter(c => {
+                return (!filterYear.value || c.year == filterYear.value) && (!filterMonth.value || c.month == filterMonth.value) && (!filterType.value || c.crimeType == filterType.value) && (!filterLocation.value || c.location == filterLocation.value);
+            });
+            filtered.forEach((c, i) => {
+                doc.text(String(i+1), 10, y);
+                doc.text(String(c.year||''), 25, y);
+                doc.text(String(c.month||''), 40, y);
+                doc.text(String(c.crimeType||''), 65, y);
+                doc.text(String(c.location||''), 90, y);
+                doc.text(String(c.date||''), 120, y);
+                doc.text(String(c.description||''), 150, y);
+                y += 8;
+            });
+            doc.save('crime-report.pdf');
+        };
+    </script>
+</body>
+</html>

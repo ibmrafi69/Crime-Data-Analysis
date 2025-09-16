@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Victim & Offender Profile Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: 'Inter', Arial, sans-serif; background: #f3f4f6; }
+    .section { background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 24px; margin-bottom: 32px; }
+    .section-title { font-size: 1.5rem; font-weight: bold; color: #3b82f6; margin-bottom: 18px; }
+    .table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    .table th, .table td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
+    .table th { background: #f1f5f9; color: #2563eb; }
+    .dashboard-title { font-size: 2rem; font-weight: bold; color: #9333ea; margin-bottom: 32px; text-align: center; }
+    .chart-container { max-width: 400px; margin: 0 auto 24px auto; }
+    .back-btn { display: flex; justify-content: end; max-width: 5xl; margin: 24px auto 0 auto; }
+    .back-btn a { display: flex; align-items: center; gap: 8px; background: #ef4444; color: #fff; font-weight: bold; padding: 10px 22px; border-radius: 10px; box-shadow: 0 2px 8px #ef444444; transition: background 0.2s; text-decoration: none; }
+    .back-btn a:hover { background: #dc2626; }
+    @media (max-width: 700px) {
+      .section { padding: 18px 8px; }
+      .dashboard-title { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="back-btn">
+    <a href="reports.html" title="Back"><i class='bx bx-arrow-back text-2xl'></i> Back</a>
+  </div>
+  <div class="max-w-5xl mx-auto py-10">
+    <div class="dashboard-title">Victim & Offender Profile Dashboard</div>
+    <!-- Victim Section -->
+    <div class="section">
+      <div class="section-title">Victim Analytics</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Age Distribution -->
+        <div>
+          <h3 class="font-semibold text-blue-600 mb-2">Age Distribution</h3>
+          <div class="chart-container"><canvas id="victimAgeChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Age Group</th><th>Count</th></tr></thead>
+            <tbody id="victimAgeTable"></tbody>
+          </table>
+        </div>
+        <!-- Gender Distribution -->
+        <div>
+          <h3 class="font-semibold text-blue-600 mb-2">Gender Distribution</h3>
+          <div class="chart-container"><canvas id="victimGenderChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Gender</th><th>Count</th></tr></thead>
+            <tbody id="victimGenderTable"></tbody>
+          </table>
+        </div>
+        <!-- Occupation Distribution -->
+        <div>
+          <h3 class="font-semibold text-blue-600 mb-2">Occupation Distribution</h3>
+          <div class="chart-container"><canvas id="victimOccChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Occupation</th><th>Count</th></tr></thead>
+            <tbody id="victimOccTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Offender Section -->
+    <div class="section">
+      <div class="section-title">Offender Analytics</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Age Distribution -->
+        <div>
+          <h3 class="font-semibold text-red-600 mb-2">Age Distribution</h3>
+          <div class="chart-container"><canvas id="offenderAgeChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Age Group</th><th>Count</th></tr></thead>
+            <tbody id="offenderAgeTable"></tbody>
+          </table>
+        </div>
+        <!-- Gender Distribution -->
+        <div>
+          <h3 class="font-semibold text-red-600 mb-2">Gender Distribution</h3>
+          <div class="chart-container"><canvas id="offenderGenderChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Gender</th><th>Count</th></tr></thead>
+            <tbody id="offenderGenderTable"></tbody>
+          </table>
+        </div>
+        <!-- Occupation Distribution -->
+        <div>
+          <h3 class="font-semibold text-red-600 mb-2">Occupation Distribution</h3>
+          <div class="chart-container"><canvas id="offenderOccChart"></canvas></div>
+          <table class="table">
+            <thead><tr><th>Occupation</th><th>Count</th></tr></thead>
+            <tbody id="offenderOccTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Utility: Count occurrences for a given type
+    function countByType(arr, key, filterType) {
+      const counts = {};
+      arr.filter(x => x.type === filterType).forEach(x => {
+        counts[x[key]] = (counts[x[key]] || 0) + 1;
+      });
+      return counts;
+    }
+    // Get profiles from localStorage
+    let profiles = [];
+    try { profiles = JSON.parse(localStorage.getItem('profiles') || '[]'); } catch { profiles = []; }
+
+    // Victim analytics
+    const victimAge = countByType(profiles, 'age', 'Victim');
+    const victimGender = countByType(profiles, 'gender', 'Victim');
+    const victimOcc = countByType(profiles, 'occupation', 'Victim');
+
+    // Offender analytics
+    const offenderAge = countByType(profiles, 'age', 'Offender');
+    const offenderGender = countByType(profiles, 'gender', 'Offender');
+    const offenderOcc = countByType(profiles, 'occupation', 'Offender');
+
+    // Utility to fill tables
+    function fillTable(tableId, dataObj) {
+      const tbody = document.getElementById(tableId);
+      tbody.innerHTML = '';
+      Object.entries(dataObj).forEach(([key, val]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${key}</td><td>${val}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Victim charts
+    new Chart(document.getElementById('victimAgeChart'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(victimAge),
+        datasets: [{ label: 'Victims', data: Object.values(victimAge), backgroundColor: '#3b82f6' }]
+      },
+      options: { plugins: { legend: { display: false } } }
+    });
+    new Chart(document.getElementById('victimGenderChart'), {
+      type: 'pie',
+      data: {
+        labels: Object.keys(victimGender),
+        datasets: [{ data: Object.values(victimGender), backgroundColor: ['#2563eb','#f59e42','#10b981'] }]
+      }
+    });
+    new Chart(document.getElementById('victimOccChart'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(victimOcc),
+        datasets: [{ label: 'Victims', data: Object.values(victimOcc), backgroundColor: '#9333ea' }]
+      },
+      options: { plugins: { legend: { display: false } } }
+    });
+
+    // Offender charts
+    new Chart(document.getElementById('offenderAgeChart'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(offenderAge),
+        datasets: [{ label: 'Offenders', data: Object.values(offenderAge), backgroundColor: '#ef4444' }]
+      },
+      options: { plugins: { legend: { display: false } } }
+    });
+    new Chart(document.getElementById('offenderGenderChart'), {
+      type: 'pie',
+      data: {
+        labels: Object.keys(offenderGender),
+        datasets: [{ data: Object.values(offenderGender), backgroundColor: ['#ef4444','#f59e42','#10b981'] }]
+      }
+    });
+    new Chart(document.getElementById('offenderOccChart'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(offenderOcc),
+        datasets: [{ label: 'Offenders', data: Object.values(offenderOcc), backgroundColor: '#f59e42' }]
+      },
+      options: { plugins: { legend: { display: false } } }
+    });
+
+    // Fill tables
+    fillTable('victimAgeTable', victimAge);
+    fillTable('victimGenderTable', victimGender);
+    fillTable('victimOccTable', victimOcc);
+    fillTable('offenderAgeTable', offenderAge);
+    fillTable('offenderGenderTable', offenderGender);
+    fillTable('offenderOccTable', offenderOcc);
+  </script>
+</body>
+</html>
